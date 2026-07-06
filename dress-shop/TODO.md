@@ -10,3 +10,5 @@
 - [x] Add `OrderController` — place order, my orders, admin list, status update.
 - [x] Add `Orders.jsx` page (customer order history).
 - [x] Wire `/orders` route in `App.jsx` and add "My Orders" to user dropdown in Navbar.
+- [x] Update `seed.js` to replace Jeggings + Shorts with 10 products each (remove 5), and use your pasted Google image URLs for those categories.
+
