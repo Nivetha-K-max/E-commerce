@@ -13,6 +13,6 @@ export const CATEGORY_IMAGES = {
   'Night Suit':   'https://images.unsplash.com/photo-1631947430066-48c30d57b943?w=400&q=80',
   'Night Pants':  'https://images.unsplash.com/photo-1617952236317-0bd127407984?w=400&q=80',
   'Shorts':       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp-RdP1eH221VmF6AOMonNpTYNh08akvLcgVVKNE5jsg&s=10',
-  'T Shirt':      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80',
-  'Crop T Shirt': 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&q=80',
+  'T Shirt':      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvtInYQPpAWuNIli9qnbRpX3DF7CqkaC8-WQEAiMNblQ&s=10',
+  'Crop T Shirt': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkuKV6Hbu5T_6K_0zE5eq4vhUyq50jIP-7az4qWEwt2g&s=10',
 }
