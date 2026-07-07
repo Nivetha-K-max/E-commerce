@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getProducts, getNewArrivals } from '../api'
+import ProductCard from '../components/ProductCard'
 import { buildGeneralInquiryLink } from '../utils/whatsapp'
 import { CATEGORIES } from '../constants/categories'
 import { CATEGORY_IMAGES } from '../constants/categoryImages'
@@ -161,29 +162,11 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
-            ) : (
-              /* 2 cols on mobile, 3 on tablet, 4 on desktop — BIG cards */
+              : (
+              /* Use ProductCard for consistent styling and behavior */
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                 {newArrivals.slice(0, 8).map(p => (
-                  <Link key={p.id} to={`/products/${p.id}`}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-card active:scale-[0.98] transition-all duration-200 hover:shadow-card-hover">
-                    <div className="relative aspect-[3/4] bg-cream overflow-hidden">
-                      {p.imageUrl
-                        ? <img src={p.imageUrl} alt={p.name} loading="lazy"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        : <div className="w-full h-full flex items-center justify-center text-5xl">👗</div>
-                      }
-                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
-                      <span className="absolute top-2 left-2 bg-rose text-white text-[10px] font-bold px-2 py-1 rounded-lg">NEW</span>
-                      <div className="absolute bottom-2 left-3">
-                        <span className="text-white font-bold text-base drop-shadow-md">₹{p.price.toLocaleString('en-IN')}</span>
-                      </div>
-                    </div>
-                    <div className="p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-rose/80 truncate">{p.category}</p>
-                      <p className="text-sm sm:text-base font-semibold text-charcoal line-clamp-2 mt-0.5 min-h-[2.5rem]">{p.name}</p>
-                    </div>
-                  </Link>
+                  <ProductCard key={p.id} product={p} />
                 ))}
               </div>
             )}
@@ -220,27 +203,10 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
-            ) : (
+              : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                 {featured.slice(0, 8).map(p => (
-                  <Link key={p.id} to={`/products/${p.id}`}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-card active:scale-[0.98] transition-all duration-200 hover:shadow-card-hover">
-                    <div className="relative aspect-[3/4] bg-cream overflow-hidden">
-                      {p.imageUrl
-                        ? <img src={p.imageUrl} alt={p.name} loading="lazy"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        : <div className="w-full h-full flex items-center justify-center text-5xl">👗</div>
-                      }
-                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
-                      <div className="absolute bottom-2 left-3">
-                        <span className="text-white font-bold text-base drop-shadow-md">₹{p.price.toLocaleString('en-IN')}</span>
-                      </div>
-                    </div>
-                    <div className="p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-rose/80 truncate">{p.category}</p>
-                      <p className="text-sm sm:text-base font-semibold text-charcoal line-clamp-2 mt-0.5 min-h-[2.5rem]">{p.name}</p>
-                    </div>
-                  </Link>
+                  <ProductCard key={p.id} product={p} />
                 ))}
               </div>
             )}
