@@ -2,7 +2,12 @@
 const fetch = globalThis.fetch || require('node-fetch')
 const API = 'http://localhost:8080/api'
 const ADMIN_USER = 'admin'
-const ADMIN_PASS = 'admin123'
+const ADMIN_PASS = process.env.ADMIN_PASSWORD
+
+if (!ADMIN_PASS) {
+  console.error('Set ADMIN_PASSWORD before running this script.')
+  process.exit(1)
+}
 
 async function login() {
   const r = await fetch(`${API}/auth/login`, {

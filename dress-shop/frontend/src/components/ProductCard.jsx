@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { useToast } from '../context/ToastContext'
-import { buildOrderLink } from '../utils/whatsapp'
 import { CATEGORY_IMAGES } from '../constants/categoryImages'
 import Button from './ui/Button'
 import Card from './ui/Card'
@@ -28,12 +27,20 @@ export default function ProductCard({ product }) {
   const { addToCart } = useCart()
   const { toggle, isWishlisted } = useWishlist()
   const toast = useToast()
+  const navigate = useNavigate()
   const wishlisted = isWishlisted(product.id)
 
   const handleAddToCart = (e) => {
     e.preventDefault()
     addToCart(product)
     toast(`"${name}" added to cart`)
+  }
+
+  const handleBuyNow = (e) => {
+    e.preventDefault()
+    addToCart(product)
+    toast(`"${name}" added to cart`)
+    navigate('/checkout')
   }
 
   const handleWishlist = (e) => {
@@ -44,8 +51,6 @@ export default function ProductCard({ product }) {
 
   return (
     <Card className="group relative overflow-hidden flex flex-col active:scale-[0.98] hover:token-card-hover">
-
-      {/* Image */}
       <Link to={`/products/${product.id}`} className="block relative aspect-[3/4] bg-cream overflow-hidden flex-shrink-0">
         {displayImage ? (
           <img
@@ -60,15 +65,14 @@ export default function ProductCard({ product }) {
           </div>
         )}
 
-        {/* Dark gradient bottom */}
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
 
-        {/* Price on image bottom — visible always on mobile */}
         <div className="absolute bottom-2 left-3">
-          <span className="text-white font-bold text-base drop-shadow-md">₹{price.toLocaleString('en-IN')}</span>
+          <span className="text-white font-bold text-base drop-shadow-md">
+            ₹{Number(price ?? 0).toLocaleString('en-IN')}
+          </span>
         </div>
 
-        {/* Badges */}
         {isNewArrival && (
           <Badge className="absolute top-2 left-2 z-10 bg-rose text-white text-[10px]">NEW</Badge>
         )}
@@ -78,7 +82,6 @@ export default function ProductCard({ product }) {
           </div>
         )}
 
-        {/* Wishlist — large touch target */}
         <button
           onClick={handleWishlist}
           aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -92,14 +95,12 @@ export default function ProductCard({ product }) {
         </button>
       </Link>
 
-      {/* Info */}
       <div className="p-3 sm:p-4 flex flex-col gap-1.5 flex-1">
         <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-rose/80 truncate">{category}</p>
         <h3 className="text-sm sm:text-base font-semibold text-charcoal leading-snug line-clamp-2 min-h-[2.5rem]">
           <Link to={`/products/${product.id}`} className="hover:text-rose transition-colors">{name}</Link>
         </h3>
 
-        {/* CTA buttons — full width, large touch targets */}
         {inStock ? (
           <div className="flex gap-2 mt-2">
             <Button onClick={handleAddToCart} className="flex-1" variant="secondary">
@@ -108,7 +109,7 @@ export default function ProductCard({ product }) {
               </svg>
               Add
             </Button>
-            <Button as="a" href={buildOrderLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" variant="primary">
+            <Button onClick={handleBuyNow} className="flex-1" variant="primary">
               Buy
             </Button>
           </div>
@@ -118,6 +119,7 @@ export default function ProductCard({ product }) {
           </button>
         )}
       </div>
-    </div>
+    </Card>
   )
 }
+

@@ -13,8 +13,13 @@
  */
 
 const API = 'http://localhost:8080/api'
-const ADMIN_USER = 'admin'
-const ADMIN_PASS = 'admin123'
+const ADMIN_USER = process.env.ADMIN_USERNAME
+const ADMIN_PASS = process.env.ADMIN_PASSWORD
+
+if (!ADMIN_USER || !ADMIN_PASS) {
+  console.error('Set ADMIN_USERNAME and ADMIN_PASSWORD before running this seed script.')
+  process.exit(1)
+}
 
 const CATEGORY_IMAGES = {
   'Kurtis Set': [

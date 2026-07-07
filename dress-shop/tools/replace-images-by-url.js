@@ -2,15 +2,33 @@
 const fetch = globalThis.fetch || require('node-fetch')
 const API = 'http://localhost:8080/api'
 const ADMIN_USER = 'admin'
-const ADMIN_PASS = 'admin123'
+const ADMIN_PASS = process.env.ADMIN_PASSWORD
 
-// URLs you provided to replace
+if (!ADMIN_PASS) {
+  console.error('Set ADMIN_PASSWORD before running this script.')
+  process.exit(1)
+}
+
+// URLs you provided to replace (original + additional)
 const TARGET_URLS = [
   'https://picsum.photos/seed/product-14/600/800',
   'https://picsum.photos/seed/product-6/600/800',
   'https://picsum.photos/seed/product-1/600/800',
   'https://picsum.photos/seed/product-3/600/800',
+  'https://picsum.photos/seed/product-13/600/800',
+  'https://picsum.photos/seed/product-2/600/800',
+  'https://picsum.photos/seed/product-4/600/800',
+  'https://picsum.photos/seed/product-7/600/800',
+  'https://picsum.photos/seed/product-8/600/800',
+  'https://picsum.photos/seed/product-9/600/800',
+  'https://picsum.photos/seed/product-10/600/800',
+  'https://picsum.photos/seed/product-11/600/800',
+  'https://picsum.photos/seed/product-12/600/800',
+  'https://picsum.photos/seed/product-5/600/800',
 ]
+
+// Additional URL the user doesn't want as a cover image
+TARGET_URLS.push('https://images.unsplash.com/photo-1617952236317-0bd127407984?w=400&q=80')
 
 // Keep in sync with frontend/src/constants/categoryImages.js
 const CATEGORY_IMAGES = {

@@ -6,6 +6,24 @@ import { useToast } from '../context/ToastContext'
 
 const SHOP_NAME = import.meta.env.VITE_SHOP_NAME || 'U99'
 
+function Field({ label, name, type = 'text', placeholder, autoComplete, value, onChange, error }) {
+  return (
+    <div className="flex flex-col">
+      <label className="block text-xs font-semibold text-charcoal mb-1.5">{label}</label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        className={`w-full bg-cream border rounded-xl px-4 py-3 text-sm text-charcoal placeholder-muted focus:outline-none focus:ring-2 focus:ring-rose/30 focus:border-rose transition-all ${error ? 'border-rose' : 'border-taupe'}`}
+      />
+      {error && <p className="text-rose text-xs mt-1">{error}</p>}
+    </div>
+  )
+}
+
 export default function Register() {
   const [form, setForm] = useState({
     name: '', email: '', phone: '', password: '', confirmPassword: '',
@@ -60,30 +78,17 @@ export default function Register() {
     }
   }
 
-  const set = (field) => (e) => {
-    setForm(f => ({ ...f, [field]: e.target.value }))
+  const handleChange = (field) => (e) => {
+    const val = e.target.value
+    setForm(f => ({ ...f, [field]: val }))
     setErrors(er => ({ ...er, [field]: '', general: '' }))
   }
 
-  const Field = ({ label, name, type = 'text', placeholder, half }) => (
-    <div className={half ? 'flex-1 min-w-0' : ''}>
-      <label className="block text-xs font-semibold text-charcoal mb-1.5">{label}</label>
-      <input
-        type={type}
-        value={form[name]}
-        onChange={set(name)}
-        placeholder={placeholder}
-        className={`w-full bg-cream border rounded-xl px-4 py-3 text-sm text-charcoal placeholder-muted focus:outline-none focus:ring-2 focus:ring-rose/30 focus:border-rose transition-all ${errors[name] ? 'border-rose' : 'border-taupe'}`}
-      />
-      {errors[name] && <p className="text-rose text-xs mt-1">{errors[name]}</p>}
-    </div>
-  )
-
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-card-hover overflow-hidden flex">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-5xl bg-white rounded-[2rem] shadow-card-hover overflow-hidden flex flex-col lg:flex-row">
 
-        {/* Left panel */}
+        {/* Left panel — desktop only */}
         <div className="hidden lg:flex flex-col justify-between bg-hero-gradient p-10 w-80 flex-shrink-0">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-10">
@@ -100,7 +105,7 @@ export default function Register() {
             </p>
           </div>
           <div className="space-y-3">
-            {['Free to register', 'Save wishlist & cart', 'Faster WhatsApp ordering', 'Manage delivery address'].map(t => (
+            {['Free to register', 'Save wishlist & cart', 'Faster online checkout', 'Manage delivery address'].map(t => (
               <div key={t} className="flex items-center gap-2 text-white/60 text-xs">
                 <svg className="w-4 h-4 text-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -112,7 +117,8 @@ export default function Register() {
         </div>
 
         {/* Right panel — form */}
-        <div className="flex-1 p-8 sm:p-10 overflow-y-auto max-h-screen">
+        <div className="flex-1 p-6 sm:p-8 lg:p-10 overflow-y-auto">
+          {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-6">
             <div className="w-8 h-8 bg-rose-gradient rounded-lg flex items-center justify-center">
               <span className="text-white font-display font-bold text-sm">U</span>
@@ -132,26 +138,58 @@ export default function Register() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Field label="Full Name" name="name" placeholder="Your full name" />
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+            <Field
+              label="Full Name" name="name" placeholder="Your full name"
+              autoComplete="name" value={form.name}
+              onChange={handleChange('name')} error={errors.name}
+            />
 
-            <div className="flex gap-3">
-              <Field label="Email address" name="email" type="email" placeholder="you@example.com" half />
-              <Field label="Phone number" name="phone" placeholder="10-digit mobile" half />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Field
+                label="Email address" name="email" type="email" placeholder="you@example.com"
+                autoComplete="email" value={form.email}
+                onChange={handleChange('email')} error={errors.email}
+              />
+              <Field
+                label="Phone number" name="phone" placeholder="10-digit mobile"
+                autoComplete="tel" value={form.phone}
+                onChange={handleChange('phone')} error={errors.phone}
+              />
             </div>
 
-            <div className="flex gap-3">
-              <Field label="Password" name="password" type="password" placeholder="Min. 6 characters" half />
-              <Field label="Confirm Password" name="confirmPassword" type="password" placeholder="Repeat password" half />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Field
+                label="Password" name="password" type="password" placeholder="Min. 6 characters"
+                autoComplete="new-password" value={form.password}
+                onChange={handleChange('password')} error={errors.password}
+              />
+              <Field
+                label="Confirm Password" name="confirmPassword" type="password" placeholder="Repeat password"
+                autoComplete="new-password" value={form.confirmPassword}
+                onChange={handleChange('confirmPassword')} error={errors.confirmPassword}
+              />
             </div>
 
             <div className="pt-2 border-t border-taupe">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">Delivery Address</p>
               <div className="flex flex-col gap-3">
-                <Field label="Street Address" name="address" placeholder="House no., street, area" />
-                <div className="flex gap-3">
-                  <Field label="City" name="city" placeholder="City" half />
-                  <Field label="Pincode" name="pincode" placeholder="6-digit pincode" half />
+                <Field
+                  label="Street Address" name="address" placeholder="House no., street, area"
+                  autoComplete="street-address" value={form.address}
+                  onChange={handleChange('address')} error={errors.address}
+                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Field
+                    label="City" name="city" placeholder="City"
+                    autoComplete="address-level2" value={form.city}
+                    onChange={handleChange('city')} error={errors.city}
+                  />
+                  <Field
+                    label="Pincode" name="pincode" placeholder="6-digit pincode"
+                    autoComplete="postal-code" value={form.pincode}
+                    onChange={handleChange('pincode')} error={errors.pincode}
+                  />
                 </div>
               </div>
             </div>

@@ -34,6 +34,12 @@ public class Product {
     @Column(name = "in_stock", nullable = false)
     private boolean inStock = true;
 
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
+
+    @Column(name = "stock_quantity")
+    private Integer stockQuantity;
+
     @Column(name = "is_new_arrival", nullable = false)
     private boolean isNewArrival = false;
 
@@ -67,6 +73,12 @@ public class Product {
 
     public boolean isInStock() { return inStock; }
     public void setInStock(boolean inStock) { this.inStock = inStock; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+
+    public Integer getStockQuantity() { return stockQuantity; }
+    public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
 
     public boolean isNewArrival() { return isNewArrival; }
     public void setNewArrival(boolean newArrival) { isNewArrival = newArrival; }

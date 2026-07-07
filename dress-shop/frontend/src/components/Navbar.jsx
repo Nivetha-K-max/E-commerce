@@ -74,11 +74,18 @@ export default function Navbar() {
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : ''
 
+  const navItems = [
+    { label: 'Home', to: '/', exact: true },
+    { label: 'Categories', to: '/categories' },
+    { label: 'New Arrivals', to: '/new-arrivals' },
+    { label: 'Sale', to: '/sale' },
+    { label: 'Offers', to: '/offers' },
+    { label: 'Contact', to: '/contact' },
+  ]
+
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-xl shadow-glass border-b border-taupe/40' : 'bg-white border-b border-taupe/60'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-14 sm:h-16 flex items-center gap-3 sm:gap-6">
-
-        {/* Logo */}
         <Link to="/" className="flex-shrink-0 flex items-center gap-2 group">
           <div className="w-8 h-8 bg-rose-gradient rounded-lg flex items-center justify-center shadow-btn">
             <span className="text-white font-display font-bold text-sm">U</span>
@@ -88,7 +95,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Search */}
         <div ref={searchRef} className="flex-1 relative max-w-2xl mx-auto">
           <form onSubmit={handleSearch} className="relative">
             <div className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none">
@@ -138,10 +144,7 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Right icons */}
         <nav className="flex items-center gap-1 flex-shrink-0">
-
-          {/* Wishlist */}
           <Link to="/wishlist"
             className={`hidden sm:flex relative items-center justify-center w-10 h-10 rounded-full transition-all hover:bg-cream ${pathname === '/wishlist' ? 'text-rose' : 'text-charcoal/60 hover:text-charcoal'}`}
             title="Wishlist">
@@ -155,7 +158,6 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* Cart */}
           <Link to="/cart"
             className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all hover:bg-cream ${pathname === '/cart' ? 'text-rose' : 'text-charcoal/60 hover:text-charcoal'}`}
             title="Cart">
@@ -169,7 +171,16 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* User — Login button or Avatar dropdown */}
+          {user && (
+            <Link to="/orders"
+              className={`hidden sm:flex relative items-center justify-center w-10 h-10 rounded-full transition-all hover:bg-cream ${pathname === '/orders' ? 'text-rose' : 'text-charcoal/60 hover:text-charcoal'}`}
+              title="My Orders">
+              <svg className="w-5 h-5" fill={pathname === '/orders' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </Link>
+          )}
+
           {user ? (
             <div ref={userMenuRef} className="relative">
               <button
@@ -195,15 +206,37 @@ export default function Navbar() {
                   </div>
                   <div className="py-1">
                     {[
-                      { label: 'My Orders', to: '/orders', icon: '📦' },
-                      { label: 'My Wishlist', to: '/wishlist', icon: '♥' },
-                      { label: 'My Cart', to: '/cart', icon: '🛍' },
+                      { label: 'My Orders', desc: 'Track & view order history', to: '/orders', icon: (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                      )},
+                      { label: 'My Wishlist', desc: 'Saved items you love', to: '/wishlist', badge: wishlistItems.length, icon: (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      )},
+                      { label: 'My Cart', desc: 'Items ready to checkout', to: '/cart', badge: totalItems, icon: (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                      )},
                     ].map(item => (
                       <Link key={item.to} to={item.to}
                         onClick={() => setShowUserMenu(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-charcoal/70 hover:bg-cream hover:text-charcoal transition-colors">
-                        <span>{item.icon}</span>
-                        {item.label}
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-cream transition-colors group">
+                        <span className="w-8 h-8 rounded-xl bg-cream group-hover:bg-taupe/30 flex items-center justify-center text-charcoal/60 flex-shrink-0 transition-colors">
+                          {item.icon}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-charcoal">{item.label}</p>
+                          <p className="text-xs text-muted">{item.desc}</p>
+                        </div>
+                        {item.badge > 0 && (
+                          <span className="flex-shrink-0 w-5 h-5 bg-rose text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {item.badge > 9 ? '9+' : item.badge}
+                          </span>
+                        )}
                       </Link>
                     ))}
                   </div>
@@ -234,20 +267,20 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* Sub nav — desktop only */}
-      <div className="hidden sm:block border-t border-taupe/40 bg-white/80">
-        <div className="max-w-7xl mx-auto px-8 flex items-center gap-6 overflow-x-auto no-scrollbar py-2">
-          {[
-            { label: 'Home', to: '/' },
-            { label: 'Products', to: '/products' },
-            { label: 'New Arrivals', to: '/products?new=1' },
-          ].map(({ label, to }) => (
-            <Link key={label} to={to}
-              className={`text-xs font-semibold whitespace-nowrap transition-colors pb-0.5 border-b-2 ${
-                pathname === to ? 'text-rose border-rose' : 'text-muted border-transparent hover:text-charcoal hover:border-taupe'
-              }`}
-            >{label}</Link>
-          ))}
+      <div className="border-t border-taupe/40 bg-white/90">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="flex items-center gap-0.5 overflow-x-auto no-scrollbar py-1.5">
+            {navItems.map(({ label, to, exact }) => {
+              const isActive = exact ? pathname === to : pathname === to.split('?')[0]
+              return (
+                <Link key={label} to={to}
+                  className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                    isActive ? 'bg-rose/10 text-rose' : 'text-charcoal/60 hover:bg-cream hover:text-charcoal'
+                  }`}
+                >{label}</Link>
+              )
+            })}
+          </div>
         </div>
       </div>
     </header>

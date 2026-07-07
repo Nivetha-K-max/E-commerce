@@ -91,6 +91,8 @@ public class ProductController {
             existing.setImageUrl(updated.getImageUrl());
             existing.setCategory(updated.getCategory());
             existing.setInStock(updated.isInStock());
+            existing.setActive(updated.isActive());
+            existing.setStockQuantity(updated.getStockQuantity());
             existing.setNewArrival(updated.isNewArrival());
             existing.setDescription(updated.getDescription());
             return ResponseEntity.ok(productRepository.save(existing));

@@ -68,7 +68,7 @@ export default function Login() {
             </p>
           </div>
           <div className="space-y-3">
-            {['Browse freely without login', 'Save wishlist across devices', 'Faster WhatsApp checkout'].map(t => (
+            {['Browse freely without login', 'Save wishlist across devices', 'Faster online checkout'].map(t => (
               <div key={t} className="flex items-center gap-2 text-white/60 text-xs">
                 <svg className="w-4 h-4 text-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />

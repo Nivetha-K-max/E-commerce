@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '910000000000'
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '919003753632'
 
 export function buildOrderLink(product) {
   const message = `Hi! I'd like to order:\n\n*${product.name}*\nPrice: ₹${product.price}\n\nIs this available?`

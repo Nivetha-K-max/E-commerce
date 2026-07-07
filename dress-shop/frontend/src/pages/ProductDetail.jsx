@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getProduct, getProducts } from '../api'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { useToast } from '../context/ToastContext'
-import { buildOrderLink } from '../utils/whatsapp'
 import ProductCard, { ProductCardSkeleton } from '../components/ProductCard'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
@@ -19,8 +18,10 @@ export default function ProductDetail() {
   const { addToCart } = useCart()
   const { toggle, isWishlisted } = useWishlist()
   const toast = useToast()
+  const navigate = useNavigate()
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     setLoading(true)
     setProduct(null)
     setRelated([])
@@ -176,7 +177,7 @@ export default function ProductDetail() {
             {product.inStock ? (
               <div className="flex flex-col sm:flex-row gap-3 mb-5">
                 <Button onClick={handleAddToCart} className="flex-1" variant="secondary">Add to Cart</Button>
-                <Button as="a" href={buildOrderLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" variant="primary">Buy on WhatsApp</Button>
+                <Button onClick={() => { handleAddToCart(); navigate('/checkout') }} className="flex-1" variant="primary">Buy Now</Button>
               </div>
             ) : (
               <button disabled className="mb-5 w-full bg-taupe text-muted font-medium py-3.5 rounded-2xl cursor-not-allowed">
@@ -207,9 +208,9 @@ export default function ProductDetail() {
             {/* Info pills */}
             <div className="bg-cream rounded-2xl p-4 flex flex-col gap-3">
               {[
-                { icon: '🚚', text: 'Order via WhatsApp — we confirm & arrange delivery' },
-                { icon: '💬', text: 'Questions? Message us anytime on WhatsApp' },
-                { icon: '🔄', text: 'Easy exchange if there\'s an issue with your order' },
+                { icon: '💳', text: 'Secure online payment — no COD available' },
+                { icon: '🚚', text: 'Fast delivery after payment confirmation' },
+                { icon: '✅', text: 'No refunds or returns — please check before ordering' },
               ].map(item => (
                 <div key={item.text} className="flex items-start gap-3 text-sm text-charcoal/60">
                   <span className="text-base">{item.icon}</span>
