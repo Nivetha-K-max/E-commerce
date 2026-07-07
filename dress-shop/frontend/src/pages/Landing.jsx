@@ -164,7 +164,7 @@ export default function Landing() {
               </div>
               : (
               /* Use ProductCard for consistent styling and behavior */
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6">
                 {newArrivals.slice(0, 8).map(p => (
                   <ProductCard key={p.id} product={p} />
                 ))}
@@ -204,7 +204,7 @@ export default function Landing() {
                 ))}
               </div>
               : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6">
                 {featured.slice(0, 8).map(p => (
                   <ProductCard key={p.id} product={p} />
                 ))}

@@ -174,11 +174,9 @@ export default function Products() {
               Just In
             </span>
           </div>
-          <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 sm:grid sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {newArrivals.map(p => (
-              <div key={p.id} className="flex-shrink-0 w-44 sm:w-auto">
-                <ProductCard product={p} />
-              </div>
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </section>
@@ -339,7 +337,7 @@ export default function Products() {
             )}
 
             {!loading && !error && filtered.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 animate-fade-up">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 animate-fade-up">
                 {filtered.map(p => <ProductCard key={p.id} product={p} />)}
               </div>
             )}
