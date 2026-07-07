@@ -6,6 +6,8 @@ import { useWishlist } from '../context/WishlistContext'
 import { useToast } from '../context/ToastContext'
 import { buildOrderLink } from '../utils/whatsapp'
 import ProductCard, { ProductCardSkeleton } from '../components/ProductCard'
+import Button from '../components/ui/Button'
+import Card from '../components/ui/Card'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -13,6 +15,7 @@ export default function ProductDetail() {
   const [related, setRelated] = useState([])
   const [loading, setLoading] = useState(true)
   const [zoomed, setZoomed] = useState(false)
+  const [selected, setSelected] = useState(0)
   const { addToCart } = useCart()
   const { toggle, isWishlisted } = useWishlist()
   const toast = useToast()
@@ -97,35 +100,50 @@ export default function ProductDetail() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
 
-          {/* Image */}
-          <div
-            className={`relative bg-cream rounded-3xl overflow-hidden cursor-zoom-in ${zoomed ? 'cursor-zoom-out' : ''} shadow-card`}
-            onClick={() => setZoomed(v => !v)}
-          >
-            {product.imageUrl ? (
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className={`w-full object-cover transition-transform duration-700 ${zoomed ? 'scale-150' : 'scale-100'} ${!product.inStock ? 'opacity-50 grayscale' : ''}`}
-              />
-            ) : (
-              <div className="aspect-[3/4] flex items-center justify-center text-muted/30">
-                <svg className="w-20 h-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            )}
+          {/* Image gallery */}
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="hidden lg:flex lg:flex-col gap-3 w-20">
+              {(product.images || [product.imageUrl]).map((src, idx) => (
+                <button key={idx} onClick={() => setSelected(idx)} className={`w-20 h-28 overflow-hidden rounded-lg ${selected===idx? 'ring-2 ring-rose' : ''}`}>
+                  <img src={src} alt={`${product.name} ${idx+1}`} loading="lazy" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
 
-            {!product.inStock && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="bg-charcoal/80 text-white text-sm font-medium px-5 py-2.5 rounded-full backdrop-blur-sm">Out of Stock</span>
+            <div
+              className={`relative flex-1 bg-cream rounded-3xl overflow-hidden cursor-zoom-in ${zoomed ? 'cursor-zoom-out' : ''} shadow-card`}
+              onClick={() => setZoomed(v => !v)}
+            >
+              { (product.images || [product.imageUrl]).map((src, idx) => (
+                <img key={idx}
+                  src={src}
+                  alt={product.name}
+                  loading="lazy"
+                  style={{ display: idx === selected ? 'block' : 'none' }}
+                  className={`w-full h-[min(70vh,800px)] object-cover transition-transform duration-700 ${zoomed ? 'scale-150' : 'scale-100'} ${!product.inStock ? 'opacity-50 grayscale' : ''}`}
+                />
+              ))}
+
+              {!product.inStock && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span className="bg-charcoal/80 text-white text-sm font-medium px-5 py-2.5 rounded-full backdrop-blur-sm">Out of Stock</span>
+                </div>
+              )}
+              {product.isNewArrival && (
+                <span className="badge-new absolute top-4 left-4">New Arrival</span>
+              )}
+              <div className="absolute bottom-3 right-3 bg-black/30 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full">
+                {zoomed ? 'Click to zoom out' : 'Click to zoom'}
               </div>
-            )}
-            {product.isNewArrival && (
-              <span className="badge-new absolute top-4 left-4">New Arrival</span>
-            )}
-            <div className="absolute bottom-3 right-3 bg-black/30 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full">
-              {zoomed ? 'Click to zoom out' : 'Click to zoom'}
+            </div>
+
+            {/* thumbnails for mobile */}
+            <div className="lg:hidden mt-2 flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+              {(product.images || [product.imageUrl]).map((src, idx) => (
+                <button key={idx} onClick={() => setSelected(idx)} className={`w-28 h-36 rounded-lg overflow-hidden flex-shrink-0 ${selected===idx? 'ring-2 ring-rose' : ''}`}>
+                  <img src={src} alt={`${product.name} ${idx+1}`} loading="lazy" className="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
           </div>
 
@@ -145,33 +163,20 @@ export default function ProductDetail() {
               <p className="text-charcoal/60 leading-relaxed mb-5 text-sm">{product.description}</p>
             )}
 
-            <div className="flex items-baseline gap-2 mb-6">
-              <span className="font-display text-4xl font-bold text-charcoal">₹{product.price.toLocaleString('en-IN')}</span>
+            <div className="flex items-baseline gap-3 mb-6">
+              <span className="font-display text-4xl sm:text-5xl font-bold text-charcoal">₹{product.price.toLocaleString('en-IN')}</span>
+              {product.mrp && product.mrp > product.price && (
+                <span className="text-sm text-muted line-through">₹{product.mrp.toLocaleString('en-IN')}</span>
+              )}
+              {product.mrp && product.mrp > product.price && (
+                <span className="ml-2 inline-flex items-center text-xs font-bold bg-rose/10 text-rose px-2 py-1 rounded">Save ₹{(product.mrp - product.price).toLocaleString('en-IN')}</span>
+              )}
             </div>
 
             {product.inStock ? (
               <div className="flex flex-col sm:flex-row gap-3 mb-5">
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-1 flex items-center justify-center gap-2 bg-charcoal text-white font-semibold py-3.5 rounded-2xl hover:bg-charcoal/90 transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                  Add to Cart
-                </button>
-                <a
-                  href={buildOrderLink(product)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 bg-rose-gradient text-white font-semibold py-3.5 rounded-2xl shadow-btn hover:shadow-lg hover:-translate-y-0.5 transition-all"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L0 24l6.335-1.508A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.49-5.19-1.348l-.37-.22-3.762.896.952-3.668-.242-.378A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-                  </svg>
-                  Buy on WhatsApp
-                </a>
+                <Button onClick={handleAddToCart} className="flex-1" variant="secondary">Add to Cart</Button>
+                <Button as="a" href={buildOrderLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" variant="primary">Buy on WhatsApp</Button>
               </div>
             ) : (
               <button disabled className="mb-5 w-full bg-taupe text-muted font-medium py-3.5 rounded-2xl cursor-not-allowed">
