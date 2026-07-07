@@ -1,5 +1,4 @@
 import React from 'react'
-import clsx from 'clsx'
 
 export default function Button({
   children,
@@ -22,20 +21,17 @@ export default function Button({
     lg: 'px-6 py-3 text-base'
   }
 
+  const classes = [base, variants[variant] || '', sizes[size] || '', className || '']
+  if (disabled || loading) classes.push('opacity-60 cursor-not-allowed')
+
   return (
-    <button
-      className={clsx(base, variants[variant], sizes[size], className, {
-        'opacity-60 cursor-not-allowed': disabled || loading,
-      })}
-      disabled={disabled || loading}
-      {...props}
-    >
+    <button className={classes.join(' ').trim()} disabled={disabled || loading} {...props}>
       {loading ? (
         <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" strokeDasharray="80" strokeDashoffset="60"></circle>
         </svg>
       ) : null}
-      <span className={clsx({ 'ml-2': loading })}>{children}</span>
+      <span className={loading ? 'ml-2' : ''}>{children}</span>
     </button>
   )
 }
