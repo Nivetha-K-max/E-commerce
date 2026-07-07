@@ -1,11 +1,16 @@
 services:
   - type: web
     name: dressshop-backend
-    runtime: docker
-    rootDir: dress-shop/backend
-    dockerfilePath: ./Dockerfile
+    runtime: node
+    rootDir: dress-shop/backend-node
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
-      - key: DB_URL
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
         sync: false
       - key: DB_USERNAME
         sync: false
