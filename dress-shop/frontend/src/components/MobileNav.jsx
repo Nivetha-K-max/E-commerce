@@ -67,17 +67,18 @@ export default function MobileNav() {
   ]
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-taupe/50 shadow-glass">
-      <div className="flex items-center justify-around">
+    <nav aria-label="Mobile navigation" className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-taupe/50 shadow-glass safe-area-inset-bottom">
+      <div className="flex items-center justify-around px-2">
         {navItems.map(({ to, label, icon, badge, exact }) => {
           const active = exact ? pathname === to : isActive(to)
           return (
             <Link
               key={to}
               to={to}
-              className={`relative flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors ${
+              className={`relative flex flex-col items-center justify-center gap-1 flex-1 py-3 px-2 transition-colors ${
                 active ? 'text-rose' : 'text-charcoal/40'
               }`}
+              aria-current={active ? 'page' : undefined}
             >
               {/* Active indicator */}
               {active && (
