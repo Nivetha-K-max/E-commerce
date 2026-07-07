@@ -4,7 +4,8 @@ services:
     runtime: java
     rootDir: dress-shop/backend
     buildCommand: chmod +x mvnw && ./mvnw clean package -DskipTests
-    startCommand: java -jar target/dressshop-1.0.0.jar
+    startCommand: java -jar target/*.jar
+
     envVars:
       - key: DB_URL
         sync: false
@@ -20,9 +21,3 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
-      - key: SERVER_BASE_URL
-        sync: false
-      - key: CORS_ALLOWED_ORIGIN
-        sync: false
-      - key: UPLOAD_DIR
-        value: ./uploads
