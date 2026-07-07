@@ -1,11 +1,9 @@
 services:
   - type: web
     name: dressshop-backend
-    runtime: java
+    runtime: docker
     rootDir: dress-shop/backend
-    buildCommand: chmod +x mvnw && ./mvnw clean package -DskipTests
-    startCommand: java -jar target/*.jar
-
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: DB_URL
         sync: false
@@ -21,3 +19,9 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: SERVER_BASE_URL
+        sync: false
+      - key: CORS_ALLOWED_ORIGIN
+        sync: false
+      - key: UPLOAD_DIR
+        value: ./uploads
