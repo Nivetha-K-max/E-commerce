@@ -7,7 +7,7 @@ const app = express()
 
 // CORS
 app.use(cors({
-  origin: process.env.CORS_ALLOWED_ORIGIN || 'http://localhost:5172',
+  origin: process.env.CORS_ALLOWED_ORIGIN || process.env.CORS || '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
